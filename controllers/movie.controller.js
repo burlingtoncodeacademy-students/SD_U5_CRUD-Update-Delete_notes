@@ -114,7 +114,12 @@ router.get("/genre/:genre", async(req,res) => {
     }
 });
 
-//TODO Update One
+//TODO Update One PUT/PATCH
+/* 
+    BOTH reference a document and update data.
+        - PUT considers the compelte document.
+        - PATCH considers individual fields within the document.
+*/
 router.patch('/', async(req,res) => {
     try {
         //1. Pull value from parameter
