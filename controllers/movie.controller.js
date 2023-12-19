@@ -114,31 +114,48 @@ router.get("/genre/:genre", async(req,res) => {
     }
 });
 
-//TODO Update One
-router.patch('/', async(req,res) => {
+//Update One PUT/PATCH
+/* 
+    BOTH reference a document and update data.
+        - PUT considers the compelte document.
+        - PATCH considers individual fields within the document.
+*/
+router.patch('/:id', async(req,res) => {
     try {
         //1. Pull value from parameter
+        const { id } = req.params
 
-        //2. PUll data from the body
+        //2. Pull data from the body
+        const info = req.body;
 
         //3. Use Schema method to locate document
+        //* findOneAndUpdate(query, data, option)
+        const update = await Movie.findOneAndUpdate({_id: id}, info,{new: true});
 
         //4. Respond to client
+        update ?
+            successResponse(res, update) : 
+            incompleteResponse(res);
         
     } catch (err) {
         errorResponse(res,err);
     }
 });
 
-//TODO Delete One
-router.delete('/', async(req,res) => {
+//Delete One
+router.delete('/:id', async(req,res) => {
     try {
         //1. Capture ID
+        const { id } = req.params;
 
         //2. Use Schema method to locate and delete document
-
+        const deleteMovie = await Movie.deleteOne({_id: id});
+        console.log(deleteMovie);
         //3. Repond to client
-        
+        deleteMovie.deletedCount ? 
+            successResponse(res, "Movie removed") :
+            incompleteResponse(res);
+
     } catch (err) {
         errorResponse(res,err);
     }
